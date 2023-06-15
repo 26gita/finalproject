@@ -12,22 +12,43 @@
     <!-- Link font awesome-->
     <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"
+        integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
+
+    <script>
+        function logout(){
+            $.removeCookie('mytoken', { path: '/' });
+            alert('Signed out!');
+            window.location.href = '/admin/login'
+        }
+    </script>
+
 </head>
 
 <body>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light" > Learning-X</div>
+            <div class="sidebar-heading border-bottom bg-light"> Learning-X</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="dashboard.html"><i
-                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="data_dosen.html"><i
-                        class="fa fa-drivers-license"></i>Data Dosen</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="data_mhs.html"><i
-                        class="fa fa-drivers-license"></i>Data Mahasiswa</a>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/dashboard'"><i
+                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data
+                    Dosen</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data
+                    Mahasiswa</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="logout()"><i class="fa fa-drivers-license"></i>
+                    Logout</button>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -48,7 +69,8 @@
             </div>
             <div class="text-center">
                 <div class="mb-4 mt-4">
-                    <img src="../../static/assets/edukasi.avif" alt=""></div>
+                    <img src="../../static/assets/edukasi.avif" alt="">
+                </div>
                 <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                     Blanditiis atque eius iure recusandae qui facere ducimus,
                     a aliquid quibusdam eveniet reiciendis et, repellat dignissimos soluta,

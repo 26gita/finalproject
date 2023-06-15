@@ -12,8 +12,68 @@
     <!-- Link font awesome-->
     <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function(){
+            $('#search').on('change', function(){
+                if($('#search').val() == ""){
+                    searchByName()
+                }
+            })
+        })
+
+        function searchByName(){
+            let search = $('#search').val()
+            
+            $.ajax({
+                method:"POST",
+                url:'/admin/data_dosen/search',
+                data:{search},
+                success:function(response){
+                    $('#tbody').empty()
+
+                    if(response.length > 0){
+                        response.forEach(function(resp) {
+                            let tempHtml = `
+                            <tr>
+                                <td><i class="fa fa-user-circle fa-lg"></i></td>
+                                <td>${resp.nama_dosen}</td>
+                                <td>${resp.nip}</td>
+                                <td>${resp.email}</td>
+                                <td>${resp.no_hp}</td>
+                                <td>
+                                    <a href="/admin/edit_data_dosen/${resp['_id']}" class="btn btn-sm btn-outline-warning">Edit <i
+                                                class="fa fa-pencil-square-o"></i></a>
+                                    <a href="/admin/hapus_data_dosen/${resp['_id']}" class="btn btn-sm btn-outline-danger">Hapus <i
+                                            class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                            `
+
+                            $('#tbody').append(tempHtml)
+                        })
+                    }else{
+                        let tempHtml = `
+                        <tr>
+                            <td colspan='6'>Tidak ada data Dosen!</td>
+                        </tr>
+                        `
+
+                        $('#tbody').append(tempHtml)
+                    }
+                }
+            })
+        }
+    </script>
+
 </head>
 
 <body>
@@ -22,12 +82,15 @@
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light">Learning-X</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="dashboard.html"><i class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" 
-                    href="data_dosen.html"><i class="fa fa-drivers-license"></i>DataDosen</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="data_mhs.html"><i class="fa fa-drivers-license"></i>Data Mahasiswa</a>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/dashboard'"><i class="fas fa-fw fa-tachometer-alt"></i>
+                    Dashboard</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data
+                    Dosen</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data
+                    Mahasiswa</button>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -46,18 +109,16 @@
             <div class="container-fluid">
                 <h3 class="mt-4">Data Dosen</h3>
                 <table class="table">
-                    <form>
-                        <div>
-                            <div class="add-search">
-                                <button class="button-add"><a href="tambah_data_dosen.html"> Tambah
-                                        <i class="fa fa-user-plus"></i></a></button>
-                                <div class="pencarian">
-                                    <input class="search1" type="search" placeholder="Search...">
-                                    <button type="submit"><span class="fa fa-search"></span> Search</button>
-                                </div>
+                    <div>
+                        <div class="add-search">
+                            <a class="button-add btn btn-success" href='/admin/tambah_data_dosen'> Tambah
+                                    <i class="fa fa-user-plus"></i></a>
+                            <div class="pencarian">
+                                <input class="search1" type="search" placeholder="Search..." id="search">
+                                <button type="button" onclick="searchByName()" class="btn btn-outline-info"><span class="fa fa-search"></span> Search</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                     <thead>
                         <tr>
                             <th>Foto</th>
@@ -68,19 +129,28 @@
                             <th>AKSI</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
+                        {% if data_dosen | length > 0 %}  <!-- Cek data dosen ada apa ngga, kalau ada loop -->
+                        {% for data in data_dosen %}
                         <tr>
                             <td><i class="fa fa-user-circle fa-lg"></i></td>
-                            <td>aqil fikri nashari</td>
-                            <td>0988877675</td>
-                            <td>@gmail.com</td>
-                            <td>0876656554</td>
+                            <td>{{ data['nama_dosen'] }}</td>
+                            <td>{{ data['nip'] }}</td>
+                            <td>{{ data['email'] }}</td>
+                            <td>{{ data['no_hp'] }}</td>
                             <td>
-                                <button style="font-size:15px"><a href="edit_data_dosen.html"> Edit <i class="fa fa-pencil-square-o"></i></a></button>
-                                <button style="font-size:15px; background-color: red;">Hapus <i
-                                        class="fa fa-trash-o"></i></button>
+                                <a href="/admin/edit_data_dosen/{{ data['_id'] }}" class="btn btn-sm btn-outline-warning">Edit <i
+                                            class="fa fa-pencil-square-o"></i></a>
+                                <a href="/admin/hapus_data_dosen/{{ data['_id'] }}" class="btn btn-sm btn-outline-danger">Hapus <i
+                                        class="fa fa-trash-o"></i></a>
                             </td>
                         </tr>
+                        {% endfor %}
+                        {% else %} <!-- kalau data dosen ga ada, tampilin ini -->
+                        <tr>
+                            <td colspan="6">Tidak ada data Dosen!</td>
+                        </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>

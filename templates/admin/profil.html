@@ -12,6 +12,9 @@
     <!-- Link font awesome-->
     <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 </head>
@@ -22,12 +25,15 @@
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light">Learning-X</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="dashboard.html"><i
-                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="data_dosen.html"><i
-                        class="fa fa-drivers-license"></i>DataDosen</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="data_mhs.html"><i
-                        class="fa fa-drivers-license"></i>Data Mahasiswa</a>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/dashboard'"><i class="fas fa-fw fa-tachometer-alt"></i>
+                    Dashboard</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>
+                    Data Dosen</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3"
+                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>
+                    Data Mahasiswa</button>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -78,10 +84,12 @@
                                             <div class="d-flex pt-1">
                                                 <button type="button" class="btn btn-outline-primary me-1 flex-grow-1">
                                                     <a href="login.html"
-                                                        style="text-decoration: none; color: black;">Log Out</a></button>
+                                                        style="text-decoration: none; color: black;">Log
+                                                        Out</a></button>
                                                 <button type="button" class="btn btn-outline-primary me-1 flex-grow-1">
                                                     <a href="dashboard.html"
-                                                        style="text-decoration: none; color: black;">Edit Profile</a></button>
+                                                        style="text-decoration: none; color: black;">Edit
+                                                        Profile</a></button>
                                             </div>
                                         </div>
                                     </div>
