@@ -331,14 +331,65 @@ def profil_dosen():
         
 
 @app.route('/mahasiswa/login', methods=['GET', 'POST'])
-def login_mahasiswa():
+def login():
+    if request.method == 'POST':
+        nim = request.form["nim"]
+        password = request.form["password"]
+        pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+        
+        result = db.mahasiswa.find_one(
+            {
+                "nim": nim,
+                "password": pw_hash,
+            }
+        )
+        
+        if result:
+            payload = {
+                "id": nim,
+                "role": 'mahasiswa',
+                "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+            }
+            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+            return jsonify(
+                {
+                    "result": "success",
+                    "token": token,
+                }
+            )
+    
+        else:
+            return jsonify(
+                {
+                    "result": "fail",
+                    "msg": "We could not find a user with that id/password combination",
+                }
+            )
+    
     msg = request.args.get("msg")
-    return render_template("mahasiswa/login_mhs.html", msg=msg)
+    return render_template("mahasiswa/login.html", msg=msg)
 
 @app.route('/mahasiswa/dashboard', methods=['GET', 'POST'])
 def dashboard_mahasiswa():
-    return render_template("mahasiswa/dashboard_mhs.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
+                # if payload['role'] !== 'mahasiswa':
+                # if payload['role'] = 'admin':
+                #     return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Admin!")
+                # elif payload['role'] == 'dosen':
+                #     return redirect(url_for('login_dosen'), msg="You are not aligible as Mahasiswa!")
+            
+        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+        # ngambil data
+        # menambahkan
+        
+        return render_template('mahasiswa/dashboard.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/mahasiswa/login')
+    
 @app.route('/mahasiswa/mk', methods=['GET', 'POST'])
 def mk_mahasiswa():
     return render_template("mahasiswa/mk_mhs.html")
