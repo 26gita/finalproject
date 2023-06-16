@@ -277,11 +277,11 @@ def dashboard_dosen():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-        # if payload['role'] != 'admin':
-        #     if payload['role'] == 'dosen':
-        #         return redirect(url_for('login_dosen'), msg="You are not aligible as Admin!")
-        #     elif payload['role'] == 'mahasiswa':
-        #         return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Admin!")
+        if payload['role'] != 'dosen':
+            if payload['role'] == 'admin':
+                return redirect(url_for('login_dosen'), msg="You are not aligible as Dosen!")
+            elif payload['role'] == 'mahasiswa':
+                return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Dosen!")
 
         user_info = db.dosen.find_one({"nip": payload['id']})
         # ngambil data
@@ -293,7 +293,14 @@ def dashboard_dosen():
 
 @app.route('/dosen/mk_dosen', methods=['GET', 'POST'])
 def mk_dosen():
-    return render_template("dosen/mk_dsn.html")
+        token_receive = request.cookies.get("mytoken")
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            
+            return render_template("dosen/mk_dosen.html", data_dosen=data_dosen)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect('/dosen/login')
+    # return render_template("dosen/mk_dsn.html")
 
 @app.route('/dosen/tambah_mk', methods=['GET', 'POST'])
 def tambah_mk_dosen():
@@ -320,10 +327,12 @@ def profil_dosen():
         token_receive = request.cookies.get("mytoken")
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            print(payload)
             user_info = db.dosen.find_one({"nip": payload['id']})
-            
+            # print(user_info)
+
             user_info['_id'] = str(user_info['_id'])
-            print(user_info)
+            
 
             return render_template("dosen/profil_dsn.html", user_info=user_info)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -331,44 +340,41 @@ def profil_dosen():
         
 
 @app.route('/mahasiswa/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        nim = request.form["nim"]
-        password = request.form["password"]
-        pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
-        
-        result = db.mahasiswa.find_one(
-            {
-                "nim": nim,
-                "password": pw_hash,
-            }
-        )
-        
-        if result:
-            payload = {
-                "id": nim,
-                "role": 'mahasiswa',
-                "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
-            }
-            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+def login_mahasiswa():
+        if request.method == 'POST':
+            nim = request.form["nim"]
+            password = request.form["password"]
+            pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+            
+            result = db.mahasiswa.find_one(
+                {
+                    "nim": nim,
+                    "password": pw_hash,
+                }
+            )
+            if result:
+                payload = {
+                    "id": nim,
+                    "role": 'mahasiswa',
+                    "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+                }
+                token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
-            return jsonify(
-                {
-                    "result": "success",
-                    "token": token,
-                }
-            )
-    
-        else:
-            return jsonify(
-                {
-                    "result": "fail",
-                    "msg": "We could not find a user with that id/password combination",
-                }
-            )
-    
-    msg = request.args.get("msg")
-    return render_template("mahasiswa/login.html", msg=msg)
+                return jsonify(
+                    {
+                        "result": "success",
+                        "token": token,
+                    }
+                )
+            else:
+                return jsonify(
+                    {
+                        "result": "fail",
+                        "msg": "We could not find a user with that id/password combination",
+                    }
+                )
+        msg = request.args.get("msg")
+        return render_template("mahasiswa/login_mhs.html", msg=msg)
 
 @app.route('/mahasiswa/dashboard', methods=['GET', 'POST'])
 def dashboard_mahasiswa():
@@ -376,17 +382,17 @@ def dashboard_mahasiswa():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-                # if payload['role'] !== 'mahasiswa':
-                # if payload['role'] = 'admin':
-                #     return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Admin!")
-                # elif payload['role'] == 'dosen':
-                #     return redirect(url_for('login_dosen'), msg="You are not aligible as Mahasiswa!")
-            
-        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+        if payload['role'] != 'mahasiswa':
+            if payload['role'] == 'admin':
+                return redirect(url_for('login_dosen'), msg="You are not aligible as Mahasiswa!")
+            elif payload['role'] == 'dosen':
+                return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Mahasiswa")
+
+        user_info = db.dosen.find_one({"nim": payload['id']})
         # ngambil data
         # menambahkan
         
-        return render_template('mahasiswa/dashboard.html', user_info=user_info)
+        return render_template('mahasiswa/dashboard_mhs.html', user_info=user_info)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/mahasiswa/login')
     
