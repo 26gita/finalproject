@@ -22,26 +22,26 @@
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 
     <script>
-        $(document).ready(function(){
-            $('#search').on('change', function(){
-                if($('#search').val() == ""){
+        $(document).ready(function () {
+            $('#search').on('change', function () {
+                if ($('#search').val() == "") {
                     searchByName()
                 }
             })
         })
 
-        function searchByName(){
+        function searchByName() {
             let search = $('#search').val()
-            
+
             $.ajax({
-                method:"POST",
-                url:'/admin/data_dosen/search',
-                data:{search},
-                success:function(response){
+                method: "POST",
+                url: '/admin/data_dosen/search',
+                data: { search },
+                success: function (response) {
                     $('#tbody').empty()
 
-                    if(response.length > 0){
-                        response.forEach(function(resp) {
+                    if (response.length > 0) {
+                        response.forEach(function (resp) {
                             let tempHtml = `
                             <tr>
                                 <td><i class="fa fa-user-circle fa-lg"></i></td>
@@ -54,13 +54,15 @@
                                                 class="fa fa-pencil-square-o"></i></a>
                                     <a href="/admin/hapus_data_dosen/${resp['_id']}" class="btn btn-sm btn-outline-danger">Hapus <i
                                             class="fa fa-trash-o"></i></a>
+                                    <a href="/admin/reset_pasword_dosen/${resp['_id']}" class="btn btn-sm btn-outline-danger">Reset Password <i
+                                            class="fa fa-lock"></i></a>
                                 </td>
                             </tr>
                             `
 
                             $('#tbody').append(tempHtml)
                         })
-                    }else{
+                    } else {
                         let tempHtml = `
                         <tr>
                             <td colspan='6'>Tidak ada data Dosen!</td>
@@ -86,11 +88,11 @@
                     onclick="window.location='/admin/dashboard'"><i class="fas fa-fw fa-tachometer-alt"></i>
                     Dashboard</button>
                 <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data
-                    Dosen</button>
+                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data Dosen
+                </button>
                 <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data
-                    Mahasiswa</button>
+                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data Mahasiswa
+                </button>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -100,7 +102,7 @@
                 <div class="container-fluid">
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
-                    <a href="profil.html" class="profile-icon">
+                    <a href="/admin/profil" class="profile-icon">
                         <i class="fa fa-user-circle fa-lg"></i>
                     </a>
                 </div>
@@ -112,10 +114,11 @@
                     <div>
                         <div class="add-search">
                             <a class="button-add btn btn-success" href='/admin/tambah_data_dosen'> Tambah
-                                    <i class="fa fa-user-plus"></i></a>
+                                <i class="fa fa-user-plus"></i></a>
                             <div class="pencarian">
                                 <input class="search1" type="search" placeholder="Search..." id="search">
-                                <button type="button" onclick="searchByName()" class="btn btn-outline-info"><span class="fa fa-search"></span> Search</button>
+                                <button type="button" onclick="searchByName()" class="btn btn-outline-info"><span
+                                        class="fa fa-search"></span> Search</button>
                             </div>
                         </div>
                     </div>
@@ -130,7 +133,7 @@
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        {% if data_dosen | length > 0 %}  <!-- Cek data dosen ada apa ngga, kalau ada loop -->
+                        {% if data_dosen | length > 0 %} <!-- Cek data dosen ada apa ngga, kalau ada loop -->
                         {% for data in data_dosen %}
                         <tr>
                             <td><i class="fa fa-user-circle fa-lg"></i></td>
@@ -139,10 +142,12 @@
                             <td>{{ data['email'] }}</td>
                             <td>{{ data['no_hp'] }}</td>
                             <td>
-                                <a href="/admin/edit_data_dosen/{{ data['_id'] }}" class="btn btn-sm btn-outline-warning">Edit <i
-                                            class="fa fa-pencil-square-o"></i></a>
-                                <a href="/admin/hapus_data_dosen/{{ data['_id'] }}" class="btn btn-sm btn-outline-danger">Hapus <i
-                                        class="fa fa-trash-o"></i></a>
+                                <a href="/admin/edit_data_dosen/{{ data['_id'] }}"
+                                    class="btn btn-sm btn-outline-warning">Edit <i class="fa fa-pencil-square-o"></i></a>
+                                <a href="/admin/hapus_data_dosen/{{ data['_id'] }}"
+                                    class="btn btn-sm btn-outline-danger">Hapus <i class="fa fa-trash-o"></i></a>
+                                <a href="/admin/reset_password_dosen/{{ data['_id'] }}"
+                                    class="btn btn-sm btn-outline-danger">Reset Password <i class="fa fa-lock"></i></a>
                             </td>
                         </tr>
                         {% endfor %}

@@ -12,6 +12,11 @@ client = MongoClient("mongodb+srv://test:sparta@cluster0.rxufawr.mongodb.net/?re
 db = client['dbFINALPROJECT']
 app =  Flask(__name__)
 
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -153,6 +158,31 @@ def edit_data_dosen(id_dosen):
 
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/admin/login')
+    
+@app.route('/admin/reset_password_dosen/<id_dosen>', methods=['GET', 'POST'])
+def reset_password_dosen(id_dosen):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.dosen.find_one({"nip": payload['id']})
+        
+        if request.method == "GET":
+            data = db.dosen.find_one({'_id' : ObjectId(id_dosen)})
+            data['_id'] = str(data['_id'])
+
+            return render_template("admin/reset_password_dosen.html", user_info=user_info, data=data)
+     
+        pw_hash = hashlib.sha256(request.form.get('newpassword').encode("utf-8")).hexdigest()
+        db.dosen.update_one(
+            {'_id' : ObjectId(id_dosen)},
+            {'$set' : {
+                'password' : pw_hash,
+            }}
+        )
+        return jsonify({'msg' : 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
 
 @app.route('/admin/hapus_data_dosen/<id_dosen>')
 def delete_data_dosen(id_dosen):
@@ -202,19 +232,66 @@ def edit_data_mhs():
 
 @app.route('/admin/profil', methods=['GET', 'POST'])
 def profil():
-    return render_template("admin/profile.html")
+    return render_template("admin/profil.html")
 
 @app.route('/dosen/login', methods=['GET', 'POST'])
 def login_dosen():
+    if request.method == 'POST':
+        nip = request.form["nip"]
+        password = request.form["password"]
+        pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+        
+        result = db.dosen.find_one(
+            {
+                "nip": nip,
+                "password": pw_hash,
+            }
+        )
+        if result:
+            payload = {
+                "id": nip,
+                "role": 'dosen',
+                "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24),
+            }
+            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+            return jsonify(
+                {
+                    "result": "success",
+                    "token": token,
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    "result": "fail",
+                    "msg": "We could not find a user with that id/password combination",
+                }
+            )
     msg = request.args.get("msg")
-    print(msg)
     return render_template("dosen/login_dsn.html", msg=msg)
 
 @app.route('/dosen/dashboard', methods=['GET', 'POST'])
 def dashboard_dosen():
-    return render_template("dosen/dashboard_dsn.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-@app.route('/dosen/mk', methods=['GET', 'POST'])
+        # if payload['role'] != 'admin':
+        #     if payload['role'] == 'dosen':
+        #         return redirect(url_for('login_dosen'), msg="You are not aligible as Admin!")
+        #     elif payload['role'] == 'mahasiswa':
+        #         return redirect(url_for('login_mahasiswa'), msg="You are not aligible as Admin!")
+
+        user_info = db.dosen.find_one({"nip": payload['id']})
+        # ngambil data
+        # menambahkan
+        
+        return render_template('dosen/dashboard_dsn.html', user_info=user_info)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
+
+@app.route('/dosen/mk_dosen', methods=['GET', 'POST'])
 def mk_dosen():
     return render_template("dosen/mk_dsn.html")
 
@@ -238,9 +315,20 @@ def tambah_modul_dosen():
 def tugas_dosen():
     return render_template("dosen/tugas_dsn.html")
 
-@app.route('/dosen/profil', methods=['GET', 'POST'])
+@app.route('/dosen/profil_dosen', methods=['GET'])
 def profil_dosen():
-    return render_template("dosen/profil_dsn.html")
+        token_receive = request.cookies.get("mytoken")
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            user_info = db.dosen.find_one({"nip": payload['id']})
+            
+            user_info['_id'] = str(user_info['_id'])
+            print(user_info)
+
+            return render_template("dosen/profil_dsn.html", user_info=user_info)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect('/dosen/dashboard')
+        
 
 @app.route('/mahasiswa/login', methods=['GET', 'POST'])
 def login_mahasiswa():
