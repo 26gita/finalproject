@@ -3,13 +3,11 @@
 
 <head>
 
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin | Login</title>
+    <title>Login Page</title>
 
     <!-- Custom fonts for this template-->
     <!-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> -->
@@ -28,50 +26,57 @@
         integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Custom styles for this template-->
-    <link href="../../static/css/admin/login.css" rel="stylesheet">
+    <link href="../../static/css/mahasiswa/login.css" rel="stylesheet">
 
     <script>
         {% if msg %}
         alert('{{ msg }}')
         {% endif %}
 
-        $(document).ready(function(){
-            if($.cookie('mytoken')){
+        $(document).ready(function () {
+            if ($.cookie('mytoken')) {
                 alert('Already logged in!')
-                window.location.href = '/admin/dashboard'
+                window.location.href = '/mahasiswa/dashboard'
             }
         })
 
-        function login_admin() {
+        function login_mahasiswa() {
             $.ajax({
                 type: "POST",
-                url: "/admin/login",
+                url: "/mahasiswa/login",
                 data: {
-                    email: $('#email').val(),
+                    nim: $('#nim').val(),
                     password: $('#password').val()
                 },
                 success: function (response) {
                     if (response["result"] === "success") {
                         $.cookie("mytoken", response["token"], { path: "/" });
-                        window.location.href = "/admin/dashboard"
+                        window.location.href = "/mahasiswa/dashboard"
                     } else {
                         alert(response["msg"]);
                     }
                 },
             });
         }
+
     </script>
+
 
 </head>
 
+
 <body>
-    <div class="admin-page">
+    <div class="mahasiswa-page">
         <div class="container-fluid">
             <header class="d-flex justify-content-center py-3">
                 <ul class="nav nav-pills">
-                    <li class="nav-item " aria-current="page"><b>Admin</b>
+                    <li class="nav-item " aria-current="page"><b>Mahasiswa</b>
                     </li>
                 </ul>
+                <!-- <ul class="nav nav-pills">
+                    <li class="nav-item " aria-current="page"><b>Dosen</b>
+                    </li>
+                </ul> -->
             </header>
         </div>
     </div>
@@ -92,20 +97,19 @@
                                         </div>
                                         <h1 class="h4 text-gray-900 mb-4">Welcome To Web-Based Learning Information
                                             System</h1>
-                                        <h2 class="h4 text-gray-900 mb-4"><b>LogIn As Admin</b> </h2>
+                                        <h2 class="h4 text-gray-900 mb-4"><b>Log In As Mahasiswa</b> </h2>
                                     </div>
                                     <div class="user">
-                                        <div class="form-group mb-2"> <i class="bi bi-envelope-at-fill">
-                                                <input type="email" class="form-control form-control-user" id="email"
-                                                    aria-describedby="emailHelp"
-                                                    placeholder="Enter Email Address..."></i>
+                                        <div class="form-group mb-2"><i class="bi bi-person-fill"></i>
+                                            <input type="text" class="form-control form-control-user" id="nim"
+                                                placeholder="Enter NIM">
                                         </div>
                                         <div class="form-group mb-4">
                                             <input type="password" class="form-control form-control-user" id="password"
                                                 placeholder="Enter Your Password">
                                         </div>
                                         <div class="login">
-                                            <button onclick="login_admin()" class="btn btn-dark btn-user btn-block">
+                                            <button onclick="login_mahasiswa()" class="btn btn-dark btn-user btn-block">
                                                 Login
                                             </button>
                                         </div>
@@ -121,13 +125,13 @@
 
     <!-- Bootstrap core JavaScript-->
     <!-- <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
+     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
 
     <!-- Core plugin JavaScript-->
     <!-- <script src="vendor/jquery-easing/jquery.easing.min.js"></script> -->
 
     <!-- Custom scripts for all pages-->
-    <!-- <script src="../../static/js/scripts.js"></script> -->
+    <!-- <Script src="js/sb-admin-2.min.js"></script> -->
 
 </body>
 
