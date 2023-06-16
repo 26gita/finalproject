@@ -104,7 +104,6 @@ def tambah_data_dosen():
             email = request.form.get("email")
             no_hp = request.form.get("no_hp")
             password = request.form.get("password")
-            print(password)
             pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
 
             # we should save the user to the database
@@ -190,19 +189,137 @@ def search_dosen_by_name():
 
 @app.route('/admin/data_mhs', methods=['GET', 'POST'])
 def data_mahasiswa():
-    return render_template("admin/data_mhs.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+        
+        data_mhs = list(db.mahasiswa.find({}))
+
+        for data in data_mhs:
+            data['_id'] = str(data['_id'])
+
+        return render_template("admin/data_mhs.html", user_info=user_info, data_mhs=data_mhs)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
 
 @app.route('/admin/tambah_data_mhs', methods=['GET', 'POST'])
 def tambah_data_mhs():
-    return render_template("admin/tambah_data_mhs.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+    
+        if request.method == 'POST':
+            #  an api endpoint for signing up
+            nim = request.form.get('nim')
+            nama_mhs = request.form.get("nama_mhs")
+            semester = request.form.get("semester")
+            email = request.form.get("email")
+            no_hp = request.form.get("no_hp")
+            password = request.form.get("password")
+            pw_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
 
-@app.route('/admin/edit_data_mhs', methods=['GET', 'POST'])
-def edit_data_mhs():
-    return render_template("admin/edit_data_mhs.html")
+            # we should save the user to the database
+            doc = {
+                "nim": nim,                               
+                "password": pw_hash,
+                "semester": semester,                                                        
+                "profile_pic": "",                                         
+                "profile_pic_real": "profile_pic/profile_placeholder.png", 
+                "nama_mhs": nama_mhs,
+                "email" : email,
+                "no_hp" : no_hp,
+
+            }
+            db.mahasiswa.insert_one(doc)
+            return jsonify({"result": "success"})
+    
+        return render_template("admin/tambah_data_mhs.html")
+    
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
+
+@app.route('/admin/edit_data_mhs/<id_mhs>', methods=['GET', 'POST'])
+def edit_data_mhs(id_mhs):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.admin.find_one({"email": payload['id']})
+        
+        if request.method == "GET":
+            data = db.mahasiswa.find_one({'_id' : ObjectId(id_mhs)})
+            data['_id'] = str(data['_id'])
+
+            return render_template("admin/edit_data_mhs.html", user_info=user_info, data=data)
+        
+        db.mahasiswa.update_one(
+            {'_id' : ObjectId(id_mhs)},
+            {'$set' : {
+                'nim' : request.form.get('nim'),
+                'nama_mhs' : request.form.get('nama_mhs'),
+                'semester' : request.form.get('semester'),
+                'no_hp' : request.form.get('no_hp'),
+                'email' : request.form.get('email'),
+            }}
+        )
+
+        return jsonify({'msg' : 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
+
+
+@app.route('/admin/hapus_data_mhs/<id_mhs>')
+def delete_data_mhs(id_mhs):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.admin.find_one({"email": payload['id']})
+        
+        db.mahasiswa.delete_one({'_id' : ObjectId(id_mhs)})
+
+        return redirect('/admin/data_mhs')
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
+    
+@app.route('/admin/data_mhs/search', methods=["POST"])
+def search_mhs_by_name():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.admin.find_one({"email": payload['id']})
+        
+        search = request.form.get('search')
+
+        data_mhs = list(db.mahasiswa.find({}))
+        filtered_data = list()
+
+        for data in data_mhs:
+            if search.lower() in data['nama_mhs'].lower():
+                data['_id'] = str(data['_id'])
+                filtered_data.append(data)
+
+        return jsonify(filtered_data)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
+
 
 @app.route('/admin/profil', methods=['GET', 'POST'])
 def profil():
-    return render_template("admin/profile.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.admin.find_one({"email": payload['id']})
+        
+        profil = list(db.admin.find({}))
+
+        for data in profil:
+            data['_id'] = str(data['_id'])
+
+        return render_template("admin/profil.html", user_info=user_info, profil=profil)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
 
 @app.route('/dosen/login', methods=['GET', 'POST'])
 def login_dosen():

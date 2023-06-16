@@ -15,8 +15,21 @@
     <!-- jquery cdn -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <!-- jquery cookie -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"
+        integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
+
+    <script>
+        function logout() {
+            $.removeCookie('mytoken', { path: '/' });
+            alert('Signed out!');
+            window.location.href = '/admin/login'
+        }
+    </script>
+
 </head>
 
 <body>
@@ -43,7 +56,7 @@
                 <div class="container-fluid">
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
-                    <a href="profil.html" class="profile-icon">
+                    <a href="/admin/profil" class="profile-icon">
                         <i class="fa fa-user-circle fa-lg"></i>
                     </a>
                 </div>
@@ -63,33 +76,20 @@
                                                 alt="Generic placeholder image" class="img-fluid"
                                                 style="width: 180px; border-radius: 10px;">
                                         </div>
+                                        {% for data in profil %}
                                         <div class="flex-grow-1 ms-3">
-                                            <h5 class="mb-1">Aqil Fikri Nashari</h5>
-                                            <p class="mb-2 pb-1" style="color: #2b2a2a;">Senior Programer</p>
+                                            <h5 class="mb-1">{{ data['nama'] }}</h5>
+                                            <p class="mb-2 pb-1" style="color: #2b2a2a;">Email: {{ data['email'] }}</p>
                                             <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
                                                 style="background-color: #efefef;">
-                                                <div>
-                                                    <p class="small text-muted mb-1">Articles</p>
-                                                    <p class="mb-0">41</p>
-                                                </div>
-                                                <div class="px-3">
-                                                    <p class="small text-muted mb-1">Followers</p>
-                                                    <p class="mb-0">976</p>
-                                                </div>
-                                                <div>
-                                                    <p class="small text-muted mb-1">Rating</p>
-                                                    <p class="mb-0">8.5</p>
-                                                </div>
                                             </div>
-                                            <div class="d-flex pt-1">
-                                                <button type="button" class="btn btn-outline-primary me-1 flex-grow-1">
-                                                    <a href="login.html"
-                                                        style="text-decoration: none; color: black;">Log
-                                                        Out</a></button>
-                                                <button type="button" class="btn btn-outline-primary me-1 flex-grow-1">
-                                                    <a href="dashboard.html"
-                                                        style="text-decoration: none; color: black;">Edit
-                                                        Profile</a></button>
+                                            {% endfor %}
+                                            <div class="d-flex gap-2 flex-row">
+                                                <button class="btn btn-sm btn-danger form-control" onclick="logout()">
+                                                    Logout</button>
+                                                <!-- <a href="dashboard.html"
+                                                            class="btn btn-sm btn-secondary form-control">Edit
+                                                            Profile</a> -->
                                             </div>
                                         </div>
                                     </div>
