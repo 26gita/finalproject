@@ -437,26 +437,105 @@ def mk_dosen():
         token_receive = request.cookies.get("mytoken")
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+            data_mk = list(db.mk.find({}))
+
+            for data in data_mk:
+                data['_id'] = str(data['_id'])
             
-            return render_template("dosen/mk_dosen.html", data_dosen=data_dosen)
+            return render_template("dosen/mk_dosen.html", data_mk=data_mk)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect('/dosen/login')
     # return render_template("dosen/mk_dsn.html")
 
-@app.route('/dosen/tambah_mk', methods=['GET', 'POST'])
+@app.route('/dosen/tambah_mk_dosen', methods=['GET', 'POST'])
 def tambah_mk_dosen():
-    return render_template("dosen/tambah_mk_dsn.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.dosen.find_one({"nip": payload['id']})
+    
+        if request.method == 'POST':
+            #  an api endpoint for signing up
+            nama_mk= request.form.get('nama_mk')
+            kode_mk = request.form.get("kode_mk")
+            semester = request.form.get("semester")
+            dsn_pengampu = request.form.get("dsn_pengampu")
+            desc = request.form.get("desc")
+            sks = request.form.get("sks")
 
-@app.route('/dosen/hapus_mk', methods=['GET', 'POST'])
-def hapus_mk_dosen():
-    return render_template("dosen/hapus_mk_dsn.html")
+            # we should save the user to the database
+            doc = {
+                "nama_mk": nama_mk,   
+                "kode_mk": kode_mk,  
+                "semester": semester,  
+                "dsn_pengampu": dsn_pengampu,
+                "desc": desc,
+                "sks" : sks                                
+            }
+            db.mk.insert_one(doc)
+            return jsonify({"result": "success"})
+    
+        return render_template("dosen/tambah_mk_dosen.html")
+    
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
+   
+
+@app.route('/dosen/hapus_mk/<id_mk>', methods=['GET', 'POST'])
+def hapus_mk_dosen(id_mk):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.dosen.find_one({"nip": payload['id']})
+        
+        db.mk.delete_one({'_id' : ObjectId(id_mk)})
+
+        return redirect('/dosen/mk_dosen')
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
 
 @app.route('/dosen/modul', methods=['GET', 'POST'])
 def modul_dosen():
-    return render_template("dosen/modul_dsn.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-@app.route('/dosen/tambah_modul', methods=['GET', 'POST'])
+        # data_mk = list(db.mk.find({}))
+
+        # for data in data_mk:
+        #     data['_id'] = str(data['_id'])
+            
+        return render_template("dosen/modul_dsn.html")
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
+        
+
+@app.route('/dosen/tambah_modul_dosen', methods=['GET', 'POST'])
 def tambah_modul_dosen():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.dosen.find_one({"nip": payload['id']})
+    
+        if request.method == 'POST':
+            #  an api endpoint for signing up
+            nama_modul= request.form.get('nama_modul')
+            desc = request.form.get("desc")
+          
+            # we should save the user to the database
+            doc = {
+                "nama_modul": nama_modul,   
+                "desc": desc,  
+                                           
+            }
+            db.modul.insert_one(doc)
+            return jsonify({"result": "success"})
+    
+        return render_template("dosen/tambah_modul_dsn.html")
+    
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
     return render_template("dosen/tambah_modul_dsn.html")
 
 @app.route('/dosen/tugas_modul', methods=['GET', 'POST'])
@@ -468,7 +547,8 @@ def profil_dosen():
         token_receive = request.cookies.get("mytoken")
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-            print(payload)
+            # print(payload)
+
             user_info = db.dosen.find_one({"nip": payload['id']})
             # print(user_info)
 
@@ -551,11 +631,27 @@ def modul2_mhs():
 
 @app.route('/mahasiswa/tugas', methods=['GET', 'POST'])
 def tugas_mhs():
-    return render_template("dosen/tugas_mhs.html")
+    return render_template("mahasiswa/tugas_mhs.html")
 
-@app.route('/mahasiswa/profil', methods=['GET', 'POST'])
+@app.route('/mahasiswa/profil', methods=['GET'])
 def profil_mhs():
-    return render_template("mahasiswa/profil_mhs.html")
+        token_receive = request.cookies.get("mytoken")
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            print(payload)
+            user_info = db.mahasiswa.find_one({"nim": payload['id']})
+            # print(user_info)
+
+            user_info['_id'] = str(user_info['_id'])
+            
+
+            return render_template("mahasiswa/profil_mhs.html", user_info=user_info)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect('/mahasiswa/dashboard')
+
+@app.route('/mahasiswa/rekap_nilai', methods=['GET', 'POST'])
+def rekap_nilai():
+    return render_template("mahasiswa/rekap_nilai.html")
 
 
 if __name__ == '__main__':

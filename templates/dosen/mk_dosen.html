@@ -8,9 +8,11 @@
     <meta name="author" content="" />
     <title>Mata Kuliah | Dosen</title>
 
-
-    <!-- Custom fonts for this template-->
-    <!-- <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
+    <!-- Link font awesome-->
+    <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -22,6 +24,7 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"
         integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <!-- jquery cookie -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"
         integrity="sha512-aUhL2xOCrpLEuGD5f6tgHbLYEXRpYZ8G5yD+WlFrXrPy2IrWBlu6bih5C9H6qGsgqnU6mgx6KtU8TreHpASprw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -38,7 +41,13 @@
             margin-bottom: 0;
             margin-left: 50px;
         }
+
+        .button-add {
+            margin-left: 10px;
+        }
     </style>
+
+    
 
 </head>
 
@@ -64,7 +73,7 @@
                 <div class="container-fluid">
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
-                    <a href="profil-dsn.html" class="profile-icon">
+                    <a href="/dosen/profil_dosen" class="profile-icon">
                         <i class="fa fa-user-circle fa-lg"></i>
                     </a>
                 </div>
@@ -73,46 +82,24 @@
             <div class="container-fluid">
                 <h3 class="mt-4">Mata Kuliah</h3>
             </div>
+            <div>
+                <a class="button-add btn btn-success" href='/dosen/tambah_mk_dosen'> Tambah</a>
+            </div>
             <div class="text-center">
                 <div class="mb-4 mt-4">
                     <div>
+                        {% for data in data_mk%}
                         <div class="card text-center" style="width: 18rem;">
                             <div class="card-body">
-                                <h5 class="card-title">MATA KULIAH 1</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                                <a href="modul-dsn.html" class="btn btn-success">Open</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
+                                <h5 class="card-title">{{ data['nama_mk'] }}</h5>
+                                <p class="card-text">{{ data['desc']}}</p>
+                                <a href="/dosen/modul"
+                                    class="btn btn-success"> Open</a>
+                                <a href="/dosen/mk_dosen/{{ data['_id'] }}"
+                                    class="btn btn-sm btn-outline-danger">Hapus <i class="fa fa-trash-o"></i></a>
                             </div>
                         </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MATA KULIAH 2</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                                <a href="modul-dsn.html" class="btn btn-success">Open</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MATA KULIAH 3</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                                <a href="modul-dsn.html" class="btn btn-success">Open</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MATA KULIAH 4</h5>
-                                <p class="card-text">With supporting text below as a natural lead-in to additional
-                                    content.</p>
-                                <a href="modul-dsn.html" class="btn btn-success">Open</a>
-                                <a href="#" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-
+                        {% endfor %}
                     </div>
                 </div>
             </div>

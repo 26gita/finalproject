@@ -19,46 +19,41 @@
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 
     <script>
-        function tambah_mk_dosen() {
-            if($('#nama_mk').val() == ""){
-                return alert("Harap isi Nama Mata Kuliah!")
+        function updateMhs() {
+            if ($('#nim').val() == "") {
+                return alert("Harap isi NIM!")
             }
 
-            if($('#kode').val() == ""){
-                return alert("Harap isi Kode Mata Kuliah!")
+            if ($('#nama_mhs').val() == "") {
+                return alert("Harap isi Nama Mahasiswa!")
             }
 
-            if($('#semester').val() == ""){
+            if ($('#semester').val() == "") {
                 return alert("Harap isi Semester!")
             }
 
-            if($('#dsn_pengampu').val() == ""){
-                return alert("Harap isi Nama Dosen Pengampu!")
+            if ($('#email').val() == "") {
+                return alert("Harap isi Email!")
             }
 
-            if($('#desc').val() == ""){
-                return alert("Harap isi Deskripsi!")
-            }
-
-            if($('#sks').val() == ""){
-                return alert("Harap isi Jumlah SKS!")
+            if ($('#no_hp').val() == "") {
+                return alert("Harap isi No Hp!")
             }
 
             $.ajax({
                 type: "POST",
-                url: "/dosen/tambah_mk_dosen",
+                url: `/mahasiswa/edit_profil/${$('#id').val()}`,
                 data: {
-                    nama_mk: $('#nama_mk').val(),
-                    kode_mk: $('#kode_mk').val(),
+                    nim: $('#nim').val(),
+                    nama_mhs: $('#nama_mhs').val(),
                     semester: $('#semester').val(),
-                    dsn_pengampu: $('#dsn_pengampu').val(),
-                    desc: $('#desc').val(),
-                    sks: $('#sks').val()
+                    email: $('#email').val(),
+                    no_hp: $('#no_hp').val()
                 },
                 success: function (response) {
-                    if (response["result"] === "success") {
-                        alert('Mata Kuliah berhasil ditambahkan!✨')
-                        window.location.replace("/dosen/mk_dosen");
+                    if (response["msg"] === "success") {
+                        alert('Profil Mahasiswa berhasil diedit!✨')
+                        window.location.replace("/mahasiswa/profil");
                     } else {
                         alert(response["msg"]);
                     }
@@ -73,17 +68,14 @@
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
-            <div class="sidebar-heading border-bottom bg-light">Learning-X</div>
+            <div class="sidebar-heading border-bottom bg-light"> Learning-X</div>
             <div class="list-group list-group-flush">
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/dashboard'"><i class="fas fa-fw fa-tachometer-alt"></i>
-                    Dashboard</button>
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data
-                    Dosen</button>
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data
-                    Mahasiswa</button>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                    href="/mahasiswa/dashboard"><i class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/mahasiswa/mk"><i
+                        class='fas fa-book'></i>Mata Kuliah</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                    href="/mahasiswa/rekap_nilai"><i class='fas fa-receipt'></i> Rekap Nilai</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -93,79 +85,84 @@
                 <div class="container-fluid">
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
-                    <a href="/dosen/profil_dosen" class="profile-icon">
+                    <a href="/mahasiswa/profil" class="profile-icon">
                         <i class="fa fa-user-circle fa-lg"></i>
                     </a>
                 </div>
             </nav>
             <!-- Page content-->
             <section class="main">
-                <h2 class=" mt-4 p-3">Tambah Modul</h2>
+                <h2 class=" mt-4 p-3">Edit Profil Data Mahasiswa</h2>
                 <div class="row row-cols-2 row-cols-md-2 g-2 row d-flex justify-content-center mt-4" id="cards-box">
                     <div class="col ">
                         <div class="card h-100">
                             <div class="card-body ">
-                                <div class="mb-4">
-                                    <h2 class="row d-flex justify-content-center mt-4">Tambah Modul</h2>
+                                <div class="mb-3">
+                                    <h2 class="row d-flex justify-content-center mt-4">Edit Profil Data</h2>
                                     <!-- <div class="form-group row mb-3">
                                         <label for="foto" class="col-sm-2 col-form-label">Foto</label>
                                         <div class="col-sm-10">
                                             <input type="file" readonly class="form-control-plaintext" id="foto">
                                         </div>
                                     </div> -->
+                                    <input type="hidden" class="form-control d-none" id="id" placeholder="Username..."
+                                        value="{{ data['_id'] }}">
                                     <div class="form-group row ">
-                                        <label for="name" class="col-sm-2 col-form-label">Nama Modul</label>
+                                        <label for="name" class="col-sm-2 col-form-label">Nama Mahasiswa</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="nama_mk" placeholder="Nama Mata Kuliah...">
+                                            <input type="text" class="form-control" id="nama_mhs"
+                                                placeholder="Username..." value="{{ data['nama_mhs'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
-                                        <label for="nip" class="col-sm-2 col-form-label">Keterangan</label>
+                                        <label for="nim" class="col-sm-2 col-form-label">Nim</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="kode_mk"
-                                                placeholder=" Enter Kode MK...">
+                                            <input type="text" class="form-control" id="nim" placeholder=" Enter NIm..."
+                                                value="{{ data['nim'] }}">
                                         </div>
                                     </div>
-                                    </div>
                                     <div class="form-group row mb-4">
-                                        <label for="nip" class="col-sm-2 col-form-label">Semester</label>
+                                        <label for="semester" class="col-sm-2 col-form-label">Semester</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control" id="semester"
-                                                placeholder=" Masukkan Semester...">
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div class="form-group row mb-4">
-                                        <label for="no hp" class="col-sm-2 col-form-label">Dosen Pengampu</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="dsn_pengampu"
-                                                placeholder="Enter Nama Dosen Pengampu...">
+                                                placeholder=" Enter Semester..." value="{{ data['semester'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
-                                        <label for="no hp" class="col-sm-2 col-form-label">Deskripsi</label>
+                                        <label for="email" class="col-sm-2 col-form-label">Email</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="desc"
-                                                placeholder="Deskripsikan Mata Kuliah...">
+                                            <input type="email" class="form-control" id="email"
+                                                placeholder="email@example.com" value="{{ data['email'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
-                                        <label for="no hp" class="col-sm-2 col-form-label">Jumlah SKS</label>
+                                        <label for="no hp" class="col-sm-2 col-form-label">No HP</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="sks"
-                                                placeholder="Enter Jumlah SKS...">
+                                            <input type="text" class="form-control" id="no_hp"
+                                                placeholder="Enter No HP..." value="{{ data['no_hp'] }}">
                                         </div>
                                     </div>
-                
-                                    <div class="d-flex flex-row gap-2">
-                                        <a href="/dosen/mk_dosen" class="btn btn-outline-secondary form-control">Kembali
-                                            <i class='fas fa-arrow-alt-circle-left'></i>
-                                        </a>
-                                        <button class="btn btn-success form-control" onclick="tambah_mk_dosen()">
-                                            Tambah
-                                            <i class="fa fa-pencil-square-o"></i>
-                                        </button>
+                                    <!-- <div class="form-group row mb-4">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="password"
+                                                placeholder="Password" value="{{ data['password'] }}">
+                                        </div>
                                     </div>
+                                    <div class="form-group row mb-2">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Confirm
+                                            Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="password-confirm"
+                                                placeholder="Password">
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <div class="d-flex gap-2 flex-row">
+                                    <a href="/mahasiswa/profil" class="btn btn-outline-secondary form-control">Cancel
+                                        <i class='fas fa-arrow-alt-circle-left'></i></a>
+                                    <button onclick="updateMhs()" class="btn btn-success form-control">Update
+                                        <i class="fa fa-pencil-square-o"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -176,12 +173,12 @@
     </section>
     </div>
     </div>
+
     <footer class="footer bg-light">
         <div class="container-fluid">
             <p>&copy; 2023 Web-Based Learning Information System</p>
         </div>
     </footer>
-
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
