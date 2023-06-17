@@ -1,35 +1,26 @@
-body{
-    background-color: #F1DBD6;
+body {
+    background-color: white;
 }
 
-.dosen-page{
-    background-color: #99ACFF;
+.admin-page {
+    background-color: #ececed;
 }
 
-li{
-    width: 150px;
+li {
+    width: 200px;
     height: 50px;
     background-color: black;
-    color: #99ACFF;
+    color: #e1e2e7;
     font-size: 30px;
     border-radius: 5px;
     text-align: center;
 }
-.login{
+
+.login {
     text-align: center;
     align-items: center;
 }
 
-.col-lg-12 {
-    background-color: #99ACFF;
-    border: 2px solid black;
-}
-
-.nav-item {
-    margin: 0 20px;
-    width: 200px;
-}
-
-.edukasi img{
+.edukasi img {
     width: 40%;
 }
