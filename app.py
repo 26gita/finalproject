@@ -595,7 +595,7 @@ def dashboard_mahasiswa():
     
 @app.route('/mahasiswa/mk', methods=['GET', 'POST'])
 def mk_mahasiswa():
-    return render_template("mahasiswa/mk_mhs.html")
+    return render_template("mahasiswa/mk_mahasiswa.html")
 
 @app.route('/mahasiswa/modul_mhs', methods=['GET', 'POST'])
 def modul_mhs():
@@ -607,11 +607,27 @@ def modul2_mhs():
 
 @app.route('/mahasiswa/tugas', methods=['GET', 'POST'])
 def tugas_mhs():
-    return render_template("dosen/tugas_mhs.html")
+    return render_template("mahasiswa/tugas_mhs.html")
 
-@app.route('/mahasiswa/profil', methods=['GET', 'POST'])
+@app.route('/mahasiswa/profil', methods=['GET'])
 def profil_mhs():
-    return render_template("mahasiswa/profil_mhs.html")
+        token_receive = request.cookies.get("mytoken")
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            print(payload)
+            user_info = db.mahasiswa.find_one({"nim": payload['id']})
+            # print(user_info)
+
+            user_info['_id'] = str(user_info['_id'])
+            
+
+            return render_template("mahasiswa/profil_mhs.html", user_info=user_info)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect('/mahasiswa/dashboard')
+
+@app.route('/mahasiswa/rekap_nilai', methods=['GET', 'POST'])
+def rekap_nilai():
+    return render_template("mahasiswa/rekap_nilai.html")
 
 
 if __name__ == '__main__':
