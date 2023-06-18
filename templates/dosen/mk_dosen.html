@@ -95,12 +95,16 @@
                                 <p class="card-text">{{ data['desc']}}</p>
                                 <a href="/dosen/modul"
                                     class="btn btn-success"> Open</a>
-                                <a href="/dosen/mk_dosen/{{ data['_id'] }}"
+                                <a href="/dosen/hapus_mk/{{ data['_id'] }}"
                                     class="btn btn-sm btn-outline-danger">Hapus <i class="fa fa-trash-o"></i></a>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
+                </div>
+                <div class="button">
+                    <a href="/dosen/mk_dosen" class="btn btn-danger">Back</a>
+                    <a href="/dosen/modul" class="btn btn-success">Next</a>
                 </div>
             </div>
         </div>

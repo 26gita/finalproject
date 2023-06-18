@@ -477,16 +477,15 @@ def modul_dosen():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-        # data_mk = list(db.mk.find({}))
+        data_modul = list(db.modul.find({}))
 
-        # for data in data_mk:
-        #     data['_id'] = str(data['_id'])
+        for data in data_modul:
+            data['_id'] = str(data['_id'])
             
-        return render_template("dosen/modul_dsn.html")
+        return render_template("dosen/modul_dsn.html", data_modul=data_modul)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/dosen/login')
         
-
 @app.route('/dosen/tambah_modul_dosen', methods=['GET', 'POST'])
 def tambah_modul_dosen():
     token_receive = request.cookies.get("mytoken")
@@ -514,6 +513,34 @@ def tambah_modul_dosen():
         return redirect('/dosen/login')
     return render_template("dosen/tambah_modul_dsn.html")
 
+@app.route('/dosen/hapus_modul/<id_modul>', methods=['GET', 'POST'])
+def hapus_modul(id_modul):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.dosen.find_one({"nip": payload['id']})
+        
+        db.modul.delete_one({'_id' : ObjectId(id_modul)})
+
+        return redirect('/dosen/modul')
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
+
+@app.route('/dosen/modul2', methods=['GET', 'POST'])
+def modul2_dosen():
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+        # data_modul = list(db.modul.find({}))
+
+        # for data in data_modul:
+        #     data['_id'] = str(data['_id'])
+            
+        return render_template("dosen/modul2_dsn.html")
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
+
 @app.route('/dosen/tugas_modul', methods=['GET', 'POST'])
 def tugas_dosen():
     return render_template("dosen/tugas_dsn.html")
@@ -535,7 +562,6 @@ def profil_dosen():
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect('/dosen/dashboard')
         
-
 @app.route('/mahasiswa/login', methods=['GET', 'POST'])
 def login_mahasiswa():
         if request.method == 'POST':
@@ -632,3 +658,5 @@ def rekap_nilai():
 
 if __name__ == '__main__':
     app.run("0.0.0.0", port=5000, debug=True)
+
+    
