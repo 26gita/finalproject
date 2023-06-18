@@ -299,6 +299,30 @@ def edit_data_mhs(id_mhs):
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/admin/login')
 
+@app.route('/admin/reset_password_mhs/<id_mhs>', methods=['GET', 'POST'])
+def reset_password_mhs(id_mhs):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+        
+        if request.method == "GET":
+            data = db.mahasiswa.find_one({'_id' : ObjectId(id_mhs)})
+            data['_id'] = str(data['_id'])
+
+            return render_template("admin/reset_password_mhs.html", user_info=user_info, data=data)
+     
+        pw_hash = hashlib.sha256(request.form.get('newpassword').encode("utf-8")).hexdigest()
+        db.mahasiswa.update_one(
+            {'_id' : ObjectId(id_mhs)},
+            {'$set' : {
+                'password' : pw_hash,
+            }}
+        )
+        return jsonify({'msg' : 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
 
 @app.route('/admin/hapus_data_mhs/<id_mhs>')
 def delete_data_mhs(id_mhs):
@@ -501,8 +525,7 @@ def tambah_modul_dosen():
             # we should save the user to the database
             doc = {
                 "nama_modul": nama_modul,   
-                "desc": desc,  
-                                           
+                "desc": desc,              
             }
             db.modul.insert_one(doc)
             return jsonify({"result": "success"})
@@ -618,7 +641,7 @@ def dashboard_mahasiswa():
         return render_template('mahasiswa/dashboard_mhs.html', user_info=user_info)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/mahasiswa/login')
-    
+   
 @app.route('/mahasiswa/mk', methods=['GET', 'POST'])
 def mk_mahasiswa():
     return render_template("mahasiswa/mk_mahasiswa.html")
@@ -641,15 +664,47 @@ def profil_mhs():
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
             print(payload)
-            user_info = db.mahasiswa.find_one({"nim": payload['id']})
+            data = db.mahasiswa.find_one({"nim": payload['id']})
             # print(user_info)
 
-            user_info['_id'] = str(user_info['_id'])
+            data = list(db.mahasiswa.find({}))
+
+            for data in data:
+                data['_id'] = str(data['_id'])
             
 
-            return render_template("mahasiswa/profil_mhs.html", user_info=user_info)
+            return render_template("mahasiswa/profil_mhs.html", data=data)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect('/mahasiswa/dashboard')
+        
+@app.route('/mahasiswa/edit_profil_mhs/<id_mhs>', methods=['GET', 'POST'])
+def edit_profil_mhs(id_mhs):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        data = db.mahasiswa.find_one({"nim": payload['id']})
+        
+        if request.method == "GET":
+            data = db.mahasiswa.find_one({'_id' : ObjectId(id_mhs)})
+            data['_id'] = str(data['_id'])
+
+            return render_template("mahasiswa/edit_profil.html", data=data)
+        
+        db.mahasiswa.update_one(
+            {'_id' : ObjectId(id_mhs)},
+            {'$set' : {
+                'nim' : request.form.get('nim'),
+                'nama_mhs' : request.form.get('nama_mhs'),
+                'semester' : request.form.get('semester'),
+                'no_hp' : request.form.get('no_hp'),
+                'email' : request.form.get('email'),
+            }}
+        )
+
+        return jsonify({'msg' : 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/mahasiswa/login')
 
 @app.route('/mahasiswa/rekap_nilai', methods=['GET', 'POST'])
 def rekap_nilai():
