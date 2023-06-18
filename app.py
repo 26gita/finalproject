@@ -299,6 +299,30 @@ def edit_data_mhs(id_mhs):
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/admin/login')
 
+@app.route('/admin/reset_password_mhs/<id_mhs>', methods=['GET', 'POST'])
+def reset_password_mhs(id_mhs):
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+        user_info = db.mahasiswa.find_one({"nim": payload['id']})
+        
+        if request.method == "GET":
+            data = db.mahasiswa.find_one({'_id' : ObjectId(id_mhs)})
+            data['_id'] = str(data['_id'])
+
+            return render_template("admin/reset_password_mhs.html", user_info=user_info, data=data)
+     
+        pw_hash = hashlib.sha256(request.form.get('newpassword').encode("utf-8")).hexdigest()
+        db.mahasiswa.update_one(
+            {'_id' : ObjectId(id_mhs)},
+            {'$set' : {
+                'password' : pw_hash,
+            }}
+        )
+        return jsonify({'msg' : 'success'})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/admin/login')
 
 @app.route('/admin/hapus_data_mhs/<id_mhs>')
 def delete_data_mhs(id_mhs):

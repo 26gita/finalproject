@@ -142,11 +142,14 @@
                             <td>{{ data['no_hp'] }}</td>
                             <td>
                                 <a href="/admin/edit_data_mhs/{{ data['_id'] }}"
-                                    class="btn btn-sm btn-outline-warning">Edit 
+                                    class="btn btn-sm btn-outline-warning">Edit
                                     <i class="fa fa-pencil-square-o"></i></a>
                                 <a href="/admin/hapus_data_mhs/{{ data['_id'] }}"
-                                    class="btn btn-sm btn-outline-danger">Hapus 
+                                    class="btn btn-sm btn-outline-danger">Hapus
                                     <i class="fa fa-trash-o"></i></a>
+                                <a href="/admin/reset_password_mhs/{{ data['_id'] }}"
+                                    class="btn btn-sm btn-outline-danger">Reset Password 
+                                    <i class="fa fa-lock"></i></a>
                             </td>
                         </tr>
                         {% endfor %}
