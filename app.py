@@ -526,8 +526,7 @@ def tambah_modul_dosen():
             # we should save the user to the database
             doc = {
                 "nama_modul": nama_modul,   
-                "desc": desc,  
-                                           
+                "desc": desc,              
             }
             db.modul.insert_one(doc)
             return jsonify({"result": "success"})
