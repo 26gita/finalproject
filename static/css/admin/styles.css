@@ -4291,7 +4291,7 @@ fieldset:disabled .btn {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    padding: 5px var(--bs-navbar-padding-x);
+    padding: 7px var(--bs-navbar-padding-x);
 }
 
 .navbar>.container,

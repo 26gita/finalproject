@@ -55,16 +55,13 @@
             <!-- Page content-->
             <div class="container-fluid">
                 <h3 class="mt-4">Mata Kuliah</h3>
-                <form action="/action_page.php" method="get">
-                    <input list="mata_kuliah" placeholder="Pilih Mata Kuliah"> <i class="fa fa-toggle-down"
-                        style="font-size: 25px; color: #2F324F;"></i>
-                    <datalist id="mata_kuliah">
-                        <option value="Matematika">
-                        <option value="Bahasa Indonesia">
-                        <option value="Bahasa Inggris">
-                        <option value="Agama">
-                    </datalist>
-                </form>
+                <div>
+                    <select name="" id="">
+                        {% for data in data_mk %}
+                        <option value="">{{data['nama_mk']}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
             <div class="text-center">
                 <div class="mb-4 mt-4">

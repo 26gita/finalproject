@@ -644,7 +644,18 @@ def dashboard_mahasiswa():
    
 @app.route('/mahasiswa/mk', methods=['GET', 'POST'])
 def mk_mahasiswa():
-    return render_template("mahasiswa/mk_mahasiswa.html")
+    token_receive = request.cookies.get("mytoken")
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+        data_mk = list(db.mk.find({}))
+
+        for data in data_mk:
+            data['_id'] = str(data['_id'])
+            
+        return render_template("mahasiswa/mk_mahasiswa.html", data_mk=data_mk)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect('/dosen/login')
 
 @app.route('/mahasiswa/modul_mhs', methods=['GET', 'POST'])
 def modul_mhs():
