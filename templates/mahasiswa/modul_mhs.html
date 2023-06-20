@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Modul | Mahasiswa</title>
+    <title>Modul | mahasiswa</title>
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
@@ -53,8 +53,6 @@
                     href="/mahasiswa/dashboard"><i class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/mahasiswa/mk"><i
                         class='fas fa-book'></i>Mata Kuliah</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="/mahasiswa/rekap_nilai"><i class='fas fa-receipt'></i> Rekap Nilai</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -100,32 +98,37 @@
                         </div>
 
                         <div class="row row-cols-1 row-cols-md-1 row d-flex">
-                            <div class=" col">
-                                <div class=" card h-100">
-                                    <form action="proses_komentar.php" method="POST">
-                                        <textarea name="komentar" rows="4" cols="50"></textarea>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <form action="/mahasiswa/modul_mhs/{{ modul['_id'] }}" method="POST">
+                                        <textarea name="comment" rows="4" cols="50"></textarea>
                                         <br>
-                                        <input type="submit" value="Kirim">
+                                        <input type="submit" value="Post Comment">
                                     </form>
                                 </div>
                                 <div class="button">
                                     <a href="/mahasiswa/mk" class="btn btn-danger">Back</a>
                                 </div>
                             </div>
-
-                            <!-- <div clas="container-fluid">
-                            <h5>Komentar Terbaru:</h5>
-                            <div id="comment-list">
-                            </div>
                         </div>
-
-                        <div>
-                            <label for="content">Komentar:</label>
-                            <textarea name="content" id="content" required></textarea><br>
-                            <input type="submit" value="Kirim Komentar">
-                            </form>
-                        </div> -->
-
+                        <div class="row row-cols-1 row-cols-md-1 row d-flex">
+                            <div class=" col">
+                                <div class=" card h-100">
+                                    <div class="card-body ">
+                                        <h2 class="row d-flex">Komentar :</h2>  
+                                        <div>
+                                            <div id="comment-list">
+                                                {% for comment in modul['comments'] %}
+                                                    <div class="comment">
+                                                        <strong>{{ comment['user'] }}:</strong> {{ comment['comment'] }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+  
                         </div>
                     </div>
                 </div>

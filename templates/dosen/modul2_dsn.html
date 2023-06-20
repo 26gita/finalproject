@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Modul | Dosen</title>
+    <title>Modul | mahasiswa</title>
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
@@ -26,21 +26,22 @@
 
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
-</head>
-<style>
-    .card {
-        display: inline-block;
-        width: 30%;
-        margin: 10px;
-        margin-top: 30px;
-        margin-bottom: 0;
-        margin-left: 50px;
-    }
 
-    .button {
-        margin-top: 30px;
-    }
-</style>
+    <style>
+        .card {
+            display: inline-block;
+            width: 80%;
+            margin: 10px;
+            margin-top: 30px;
+            margin-bottom: 0;
+            margin-left: 50px;
+        }
+
+        .button {
+            margin-top: 30px;
+        }
+    </style>
+</head>
 
 <body>
     <div class="d-flex" id="wrapper">
@@ -49,11 +50,9 @@
             <div class="sidebar-heading border-bottom bg-light"> Learning-X</div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/dashboard"><i
-                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                    class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/mk_dosen"><i
-                        class="fa fa-drivers-license"></i> Mata Kuliah</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                    href="daftarnilai-dsn.html"><i class="fa fa-drivers-license"></i> Daftar Nilai Mahasiswa</a>
+                    class="fa fa-drivers-license"></i> Mata Kuliah</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -78,43 +77,50 @@
                         <div class="card text-center">
                             <div class="card-body">
                                 <h5 class="card-title">{{modul['nama_modul'] }}</h5>
-                                <a href="{{ url_for('static', filename=modul['file_modul']) }}" target="_blank" download>Download Modul Disini</a>
-                                <a href="#" class="btn btn-primary"></a>
+                                <a href="{{ url_for('static', filename=modul['file_modul']) }}" target="_blank"
+                                    download>Download Modul Disini</a>
+
                             </div>
                         </div>
                         <div class="card text-center">
                             <div class="card-body">
                                 <h5 class="card-title">Tugas Dari {{modul['nama_modul'] }}</h5>
-                                <a href="{{ url_for('static', filename=modul['file_tugas']) }}" target="_blank" download>Download Instruksi Tugas Disini</a>
-                                <a href="#" class="btn btn-primary"></a>
+                                <a href="{{ url_for('static', filename=modul['file_tugas']) }}" target="_blank"
+                                    download>Download Tugas Disini</a><br>
                             </div>
                         </div>
 
+                        <div class="row row-cols-1 row-cols-md-1 row d-flex">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <form action="/dosen/modul2/{{ modul['_id'] }}" method="POST">
+                                        <textarea name="comment" rows="4" cols="50"></textarea>
+                                        <br>
+                                        <input type="submit" value="Post Comment">
+                                    </form>
+                                </div>
+                                <div class="button">
+                                    <a href="/dosen/mk_dosen" class="btn btn-danger">Back</a>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row row-cols-1 row-cols-md-1 row d-flex">
                             <div class=" col">
                                 <div class=" card h-100">
                                     <div class="card-body ">
                                         <h2 class="row d-flex">Komentar :</h2>
+                                        <div>
+                                            <div id="comment-list">
+                                                {% for comment in modul['comments'] %}
+                                                <div class="comment">
+                                                    <strong>{{ comment['user'] }}:</strong> {{ comment['comment'] }}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="button">
-                                    <a href="/dosen/modul" class="btn btn-danger">Back</a>
-                                    <a href="/dosen/tugas_modul" class="btn btn-success">Check Tugas</a>
-                                </div>
                             </div>
-
-                            <!-- <div clas="container-fluid">
-                            <h5>Komentar Terbaru:</h5>
-                            <div id="comment-list">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="content">Komentar:</label>
-                            <textarea name="content" id="content" required></textarea><br>
-                            <input type="submit" value="Kirim Komentar">
-                            </form>
-                        </div> -->
 
                         </div>
                     </div>

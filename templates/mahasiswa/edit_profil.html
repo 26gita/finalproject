@@ -44,7 +44,6 @@
                 type: "POST",
                 url: `/mahasiswa/edit_profil_mhs/${$('#id').val()}`,
                 data: {
-                    foto: $('#foto').val(),
                     nim: $('#nim').val(),
                     nama_mhs: $('#nama_mhs').val(),
                     semester: $('#semester').val(),
@@ -71,15 +70,10 @@
         <div class="border-end bg-white" id="sidebar-wrapper">
             <div class="sidebar-heading border-bottom bg-light">Learning-X</div>
             <div class="list-group list-group-flush">
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/dashboard'"><i class="fas fa-fw fa-tachometer-alt"></i>
-                    Dashboard</button>
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_dosen'"><i class="fa fa-drivers-license"></i>Data
-                    Dosen</button>
-                <button class="list-group-item list-group-item-action list-group-item-light p-3"
-                    onclick="window.location='/admin/data_mhs'"><i class="fa fa-drivers-license"></i>Data
-                    Mahasiswa</button>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                    href="/mahasiswa/dashboard"><i class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/mahasiswa/mk"><i
+                        class='fas fa-book'></i>Mata Kuliah</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -96,22 +90,21 @@
             </nav>
             <!-- Page content-->
             <section class="main">
-                <h2 class=" mt-4 p-3">Edit Profil Mahasiswa</h2>
+                <h2 class=" mt-4 p-3">Edit Data Mahasiswa</h2>
                 <div class="row row-cols-2 row-cols-md-2 g-2 row d-flex justify-content-center mt-4" id="cards-box">
-                    <div class="col w-75">
+                    <div class="col ">
                         <div class="card h-100">
                             <div class="card-body ">
                                 <div class="mb-3">
                                     <h2 class="row d-flex justify-content-center mt-4">Edit Data</h2>
-                                    <input type="hidden" class="form-control d-none" id="id" placeholder="..."
-                                        value="{{ data['_id'] }}">
-                                    <div class="form-group row mb-3">
+                                    <!-- <div class="form-group row mb-3">
                                         <label for="foto" class="col-sm-2 col-form-label">Foto</label>
                                         <div class="col-sm-10">
-                                            <input type="file" readonly class="form-control-plaintext" 
-                                            id="foto" value="{{ data['foto'] }}"  >
+                                            <input type="file" readonly class="form-control-plaintext" id="foto">
                                         </div>
-                                    </div>
+                                    </div> -->
+                                    <input type="hidden" class="form-control d-none" id="id" placeholder="Username..."
+                                        value="{{ data['_id'] }}">
                                     <div class="form-group row ">
                                         <label for="name" class="col-sm-2 col-form-label">Nama Mahasiswa</label>
                                         <div class="col-sm-10">
@@ -129,8 +122,8 @@
                                     <div class="form-group row mb-4">
                                         <label for="semester" class="col-sm-2 col-form-label">Semester</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="semester"
-                                                placeholder=" Enter Semester..." value="{{ data['semester'] }}">
+                                            <input type="text" class="form-control" id="semester" placeholder=" Enter Semester..."
+                                                value="{{ data['semester'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
