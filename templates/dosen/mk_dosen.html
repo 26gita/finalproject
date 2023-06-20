@@ -82,7 +82,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ data['nama_mk'] }}</h5>
                                 <p class="card-text">{{ data['desc']}}</p>
-                                <a href="/dosen/modul" class="btn btn-success"> Open</a>
+                                <a href="/dosen/modul/{{ data['_id'] }}" class="btn btn-success"> Open</a>
                                 <a href="/dosen/hapus_mk/{{ data['_id'] }}" class="btn btn-sm btn-outline-danger">Hapus
                                     <i class="fa fa-trash-o"></i></a>
                             </div>

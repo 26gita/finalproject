@@ -66,10 +66,10 @@
             </nav>
             <!-- Page content-->
             <div class="container-fluid">
-                <h3 class="mt-4">Mata Kuliah/ Mata Kuliah 1</h3>
+                <h3 class="mt-4">Mata Kuliah / {{ matkul['nama_mk'] }}</h3>
             </div>
             <div>
-                <a class="button-add btn btn-success" href='/dosen/tambah_modul_dosen'> Tambah</a>
+                <a class="button-add btn btn-success" href="/dosen/tambah_modul_dosen/{{ matkul['_id'] }}"> Tambah</a>
             </div>
             <div class="text-center">
                 <div class="mb-4 mt-4">
@@ -79,7 +79,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ data['nama_modul'] }}</h5>
                                 <p class="card-text">{{ data['desc']}}</p>
-                                <a href="/dosen/modul2" class="btn btn-success"> Open</a>
+                                <a href="/dosen/modul2/{{ data['_id'] }}" class="btn btn-success"> Open</a>
                                 <a href="/dosen/hapus_modul/{{ data['_id'] }}"
                                     class="btn btn-sm btn-outline-danger">Hapus <i class="fa fa-trash-o"></i></a>
                             </div>

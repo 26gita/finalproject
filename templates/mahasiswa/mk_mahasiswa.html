@@ -9,22 +9,71 @@
     <title>Mata Kuliah | Mahasiswa</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
+    <!-- JQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
     <!-- Link font awesome-->
     <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
+
+    <style>
+        .card {
+            display: inline-block;
+            width: 30%;
+            margin: 10px;
+            margin-top: 30;
+            margin-bottom: 0;
+            margin-left: 50px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function(){
+            getModulByMK()
+        })
+
+        function getModulByMK(){
+            $('#modul-container').empty()
+            $('#modul-container').append(`
+                <div class="card text-center" style="width: 18rem;">
+                    Loading Moduls
+                </div>
+            `)
+            let mk_id = $('#mata-kuliah').val()
+
+            $.ajax({
+                url:`/mahasiswa/modul/get/${mk_id}`,
+                method:"GET",
+                success: function(data){
+                    $('#modul-container').empty()
+                    if(data.moduls.length > 0){
+                        data.moduls.forEach(function(modul){
+                        let temp_html = `
+                            <div class="card text-center" style="width: 18rem;">
+                                <div class="card-body">
+                                    <h5 class="card-title">${modul.nama_modul}</h5>
+                                    <a href="/mahasiswa/modul_mhs/${modul._id}" class="btn btn-success"> Open</a>
+                                    
+                                </div>
+                            </div>
+                            `
+
+                            $('#modul-container').append(temp_html)
+                        })
+                    }else{
+                        $('#modul-container').append(`
+                            <div class="card text-center" style="width: 18rem;">
+                                Tidak Ada Data Modul!
+                            </div>
+                        `)
+                    }
+                }
+            })
+        }
+    </script>
 </head>
-<style>
-    .card {
-        display: inline-block;
-        width: 30%;
-        margin: 10px;
-        margin-top: 30;
-        margin-bottom: 0;
-        margin-left: 50px;
-    }
-</style>
 
 <body>
     <div class="d-flex" id="wrapper">
@@ -56,88 +105,16 @@
             <div class="container-fluid">
                 <h3 class="mt-4">Mata Kuliah</h3>
                 <div>
-                    <select name="" id="">
+                    <select name="" id="mata-kuliah" onchange="getModulByMK()">
                         {% for data in data_mk %}
-                        <option value="">{{data['nama_mk']}}</option>
+                        <option value="{{data['_id']}}">{{data['nama_mk']}}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
             <div class="text-center">
                 <div class="mb-4 mt-4">
-                    <div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 1</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 2</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 3</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 4</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 5</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 6</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 7</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 8</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 9</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 10</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 11</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
-                        <div class="card text-center" style="width: 18rem;">
-                            <div class="card-body">
-                                <h5 class="card-title">MODUL 12</h5>
-                                <a href="modul_mhs.html" class="btn btn-success">Open</a>
-                            </div>
-                        </div>
+                    <div id="modul-container">
                     </div>
                 </div>
             </div>

@@ -27,21 +27,30 @@
                 return alert("Harap isi Nama Modul!")
             }
 
-            if ($('#desc').val() == "") {
-                return alert("Harap isi Deskripsi!")
+            if($('#tugas').prop('files').length == 0){
+                return alert("Harap upload instruksi tugas!")
             }
 
+            if($('#modul').prop('files').length == 0){
+                return alert("Harap upload file modul!")
+            }
+
+            let formdata = new FormData()
+            formdata.append('nama_modul', $('#nama_modul').val())
+            formdata.append('file-tugas', $('#tugas').prop('files')[0])
+            formdata.append('file-modul', $('#modul').prop('files')[0])
+
             $.ajax({
-                type: "POST",
-                url: "/dosen/tambah_modul_dosen",
-                data: {
-                    nama_modul: $('#nama_modul').val(),
-                    desc: $('#desc').val(),
-                },
+                method: "POST",
+                url: "/dosen/tambah_modul_dosen/{{ mk_id }}",
+                data: formdata,
+                cache: false,
+                contentType: false,
+                processData: false,
                 success: function (response) {
                     if (response["result"] === "success") {
                         alert('Modul berhasil ditambahkan!✨')
-                        window.location.replace("/dosen/modul");
+                        window.location.replace("/dosen/modul/{{ mk_id }}");
                     } else {
                         alert(response["msg"]);
                     }
@@ -100,16 +109,13 @@
                                                 placeholder="Nama Modul...">
                                         </div>
                                     </div>
-                                    <div class="form-group row mb-4">
-                                        <label for="nip" class="col-sm-2 col-form-label">Deskripsi</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="desc"
-                                                placeholder=" Deskripsikan Modul...">
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="tugas" class="form-label">Tugas</label>
+                                        <input class="form-control" type="file" id="tugas">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="formFile" class="form-label">Tugas</label>
-                                        <input class="form-control" type="file" id="formFile">
+                                        <label for="modul" class="form-label">Modul</label>
+                                        <input class="form-control" type="file" id="modul">
                                     </div>
                                 </div>
 
