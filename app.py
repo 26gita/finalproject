@@ -1,3 +1,6 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from datetime import datetime, timedelta
 import hashlib
@@ -7,11 +10,21 @@ import jwt
 from bson import ObjectId
 from werkzeug.utils import secure_filename
 
-SECRET_KEY = 'goaqil'
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
-client = MongoClient("mongodb+srv://test:sparta@cluster0.rxufawr.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())  
-db = client['dbFINALPROJECT']
-app =  Flask(__name__)
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+SECRET_KEY =  os.environ.get("SECRET_KEY")
+ALGORITHMS =  os.environ.get("ALGORITHMS")
+
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
+
+app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["UPLOAD_FOLDER"] = "./static/tugas"
+app.config["UPLOAD_FOLDER"] = "./static/modul"
 
 @app.route('/')
 def index():
