@@ -573,17 +573,17 @@ def modul_dosen2(mk_id):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-        if request.method == 'POST':
-            comment = request.form.get('comment')
-            user = payload.get('role') or payload.get('nama_dosen')  
-          
-
-        data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
-  
-
         modul = db.modul.find_one({'_id' : ObjectId(mk_id)})
         data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
         print(modul)
+
+        if request.method == 'POST':
+            comment = request.form.get('comment')
+            user = payload.get('role') or payload.get('nama_dosen')  
+            db.modul.update_one({'_id': modul['_id']}, {'$push': {'comments': {'user': user, 'comment': comment}}})
+            modul = db.modul.find_one({'_id' : ObjectId(mk_id)})
+
+        data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
 
         for data in data_modul:
             data['_id'] = str(data['_id'])
@@ -611,19 +611,19 @@ def profil_dosen():
             return redirect('/dosen/dashboard')
         
 @app.route('/dosen/edit_profil_dosen/<id_dosen>', methods=['GET', 'POST'])
-def edit_profil_dosen(id_dosen):
+def edit_profil_dsn(id_dosen):
     token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-        user_info = db.dosen.find_one({"nip": payload['id']})
+        data = db.dosen.find_one({"nip": payload['id']})
         
         if request.method == "GET":
-            user_info = db.dosen.find_one({'_id' : ObjectId(id_dosen)})
-            user_info['_id'] = str(user_info['_id'])
+            data = db.dosen.find_one({'_id' : ObjectId(id_dosen)})
+            data['_id'] = str(data['_id'])
 
-            return render_template("dosen/edit_profil_dsn.html", user_info=user_info)
+            return render_template("dosen/edit_profil_dsn.html", data=data)
         
-        db.dosen.update_one(
+        db.mahasiswa.update_one(
             {'_id' : ObjectId(id_dosen)},
             {'$set' : {
                 'nip' : request.form.get('nip'),
