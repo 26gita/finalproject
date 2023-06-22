@@ -12733,7 +12733,8 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     right: 10px;
     color: #333333;
     font-size: 24px;
-    width: 50px;
+    width: 65px;
+    border-radius: 80%;
 }
 
 button a {

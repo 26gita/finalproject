@@ -31,11 +31,19 @@
     <!-- connect to css -->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 
+    <style>
+        .image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
     <script>
         function logout_dosen() {
             $.removeCookie('mytoken', { path: '/' });
             alert('Logged out!');
-            window.location.href = '/dosen/login'
+            window.location.href = '/'
         }
     </script>
 </head>
@@ -47,9 +55,9 @@
             <div class="sidebar-heading border-bottom bg-light">Learning-X</div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/dashboard"><i
-                    class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/mk_dosen"><i
-                    class="fa fa-drivers-license"></i> Mata Kuliah</a>
+                        class="fa fa-drivers-license"></i> Mata Kuliah</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -75,6 +83,10 @@
                                 <div class="card-body p-4">
                                     <div class="d-flex text-black">
                                         <div class="flex-grow-1 ms-3">
+                                            <a class="image" href="/user/{{ user_info.nip}}">
+                                                <img class="is-rounded"
+                                                    src="{{ url_for('static', filename=user_info.profile_pic_real) }}" />
+                                            </a>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">Nama Dosen:
                                                 {{user_info['nama_dosen'] }}</p>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">NIP: {{ user_info['nip'] }}</p>

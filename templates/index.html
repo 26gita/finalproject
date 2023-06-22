@@ -31,18 +31,20 @@
 
     <style>
         body {
-            background-color: white;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../static/assets/bg2.jpg");
+             background-size: cover;
+            background-position: center;
         }
 
-        .admin-page {
-            background-color: #ececed;
+        .index-page {
+            background-color: white;
         }
 
         li {
             width: 150px;
             height: 50px;
-            background-color: black;
-            color: #e1e2e7;
+            background-color: rgb(35, 122, 194);
+            color: #ffffff;
             font-size: 30px;
             border-radius: 5px;
             text-align: center;
@@ -54,56 +56,61 @@
         }
 
         .edukasi img {
-            width: 40%;
+            width: 50%;
+            border-radius: 80%;
+            margin-bottom: 15px;
         }
 
         .nav-item {
             margin-left: 30px;
             width: 200px;
         }
+
+        .p-5 {
+            background-image: url("../../static/assets/bg2.jpg");
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+        }
+
+        
     </style>
 
 </head>
 
 <body>
-    <div class="index-page">
+    <!-- <div class="index-page">
         <div class="container-fluid">
             <header class="d-flex justify-content-center py-3">
-                <ul class="nav nav-pills">
-                    <li class="nav-item " aria-current="page"><b>Mahasiswa</b>
-                    </li>
-                </ul>
-                <ul class="nav nav-pills">
-                    <li class="nav-item " aria-current="page"><b>Dosen</b>
-                    </li>
-                </ul>
+              <h2>WeBLIS</h2>
             </header>
         </div>
     </div>
-    <div class="container">
+    <div class="container"> -->
 
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <div class="card o-hidden border-0 shadow-lg my-5">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <div class="edukasi">
-                                            <img src="../../static/assets/edukasi.avif" alt="">
-                                        </div>
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <div class="edukasi">
+                                        <img src="../../static/assets/edukasi.avif" alt="">
+                                    </div>
+                                    <div>
                                         <h1 class="h4 text-gray-900 mb-4">Welcome To Web-Based Learning Information
                                             System</h1>
                                         <h2 class="h4 text-gray-900 mb-4"><b>Login As Mahasiswa or Dosen?</b> </h2>
 
                                         <div class="d-flex flex-row gap-2">
                                             <a href="/mahasiswa/login"
-                                                class="btn btn-outline-primary form-control">Mahasiswa
+                                                class="btn btn-dark form-control">Mahasiswa
                                             </a>
-                                            <a href="/dosen/login" class="btn btn-outline-primary form-control">Dosen
+                                            <a href="/dosen/login" class="btn btn-dark form-control">Dosen
                                             </a>
                                         </div>
 

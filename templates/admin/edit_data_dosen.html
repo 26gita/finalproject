@@ -19,24 +19,28 @@
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 
     <style>
-        
+        img {
+            width: 70%;
+            border-radius: 80%;
+            margin-bottom: 15px;
+        }
     </style>
-
+    
     <script>
-        function updateDosen(){
-            if($('#nip').val() == ""){
+        function updateDosen() {
+            if ($('#nip').val() == "") {
                 return alert("Harap isi NIP!")
             }
 
-            if($('#nama_dosen').val() == ""){
+            if ($('#nama_dosen').val() == "") {
                 return alert("Harap isi Nama Dosen!")
             }
 
-            if($('#email').val() == ""){
+            if ($('#email').val() == "") {
                 return alert("Harap isi Email!")
             }
 
-            if($('#no_hp').val() == ""){
+            if ($('#no_hp').val() == "") {
                 return alert("Harap isi No Hp!")
             }
 
@@ -88,7 +92,7 @@
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
                     <a href="/admin/profil" class="profile-icon">
-                        <i class="fa fa-user-circle fa-lg"></i>
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp">
                     </a>
                 </div>
             </nav>
@@ -107,18 +111,20 @@
                                             <input type="file" readonly class="form-control-plaintext" id="foto">
                                         </div>
                                     </div> -->
-                                    <input type="hidden" class="form-control d-none" id="id" placeholder="Username..." value="{{ data['_id'] }}">
+                                    <input type="hidden" class="form-control d-none" id="id" placeholder="Username..."
+                                        value="{{ data['_id'] }}">
                                     <div class="form-group row ">
                                         <label for="name" class="col-sm-2 col-form-label">Nama Dosen</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="nama_dosen" placeholder="Username..." value="{{ data['nama_dosen'] }}">
+                                            <input type="text" class="form-control" id="nama_dosen"
+                                                placeholder="Username..." value="{{ data['nama_dosen'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">
                                         <label for="nip" class="col-sm-2 col-form-label">Nip</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="nip"
-                                                placeholder=" Enter NIP..." value="{{ data['nip'] }}">
+                                            <input type="text" class="form-control" id="nip" placeholder=" Enter NIP..."
+                                                value="{{ data['nip'] }}">
                                         </div>
                                     </div>
                                     <div class="form-group row mb-4">

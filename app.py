@@ -1,3 +1,6 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from datetime import datetime, timedelta
 import hashlib
@@ -7,11 +10,22 @@ import jwt
 from bson import ObjectId
 from werkzeug.utils import secure_filename
 
-SECRET_KEY = 'goaqil'
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
-client = MongoClient("mongodb+srv://test:sparta@cluster0.rxufawr.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=certifi.where())  
-db = client['dbFINALPROJECT']
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+SECRET_KEY =  os.environ.get("SECRET_KEY")
+ALGORITHMS =  os.environ.get("ALGORITHMS")
+
+client = MongoClient(MONGODB_URI, tlsCAFile=certifi.where())  
+db = client[DB_NAME]
+
 app =  Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["UPLOAD_FOLDER"] = "./static/tugas"
+app.config["UPLOAD_FOLDER"] = "./static/modul"
+
 
 @app.route('/')
 def index():
@@ -433,7 +447,7 @@ def dashboard_dosen():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect('/dosen/login')
 
-@app.route('/dosen/mk_dosen', methods=['GET', 'POST'])
+@app.route('/dosen/mk_dosen/', methods=['GET', 'POST'])
 def mk_dosen():
         token_receive = request.cookies.get("mytoken")
         try:
@@ -449,7 +463,7 @@ def mk_dosen():
             return redirect('/dosen/login')
     # return render_template("dosen/mk_dsn.html")
 
-@app.route('/dosen/tambah_mk_dosen', methods=['GET', 'POST'])
+@app.route('/dosen/tambah_mk_dosen/', methods=['GET', 'POST'])
 def tambah_mk_dosen():
     token_receive = request.cookies.get("mytoken")
     try:
@@ -459,18 +473,14 @@ def tambah_mk_dosen():
         if request.method == 'POST':
             #  an api endpoint for signing up
             nama_mk= request.form.get('nama_mk')
-            kode_mk = request.form.get("kode_mk")
             semester = request.form.get("semester")
-            dsn_pengampu = request.form.get("dsn_pengampu")
             desc = request.form.get("desc")
             sks = request.form.get("sks")
 
             # we should save the user to the database
             doc = {
-                "nama_mk": nama_mk,   
-                "kode_mk": kode_mk,  
+                "nama_mk": nama_mk,    
                 "semester": semester,  
-                "dsn_pengampu": dsn_pengampu,
                 "desc": desc,
                 "sks" : sks                                
             }
@@ -573,17 +583,17 @@ def modul_dosen2(mk_id):
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-        if request.method == 'POST':
-            comment = request.form.get('comment')
-            user = payload.get('role') or payload.get('nama_dosen')  
-          
-
-        data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
-  
-
         modul = db.modul.find_one({'_id' : ObjectId(mk_id)})
         data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
         print(modul)
+
+        if request.method == 'POST':
+            comment = request.form.get('comment')
+            user = payload.get('role') or payload.get('nama_dosen')  
+            db.modul.update_one({'_id': modul['_id']}, {'$push': {'comments': {'user': user, 'comment': comment}}})
+            modul = db.modul.find_one({'_id' : ObjectId(mk_id)})
+
+        data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
 
         for data in data_modul:
             data['_id'] = str(data['_id'])
@@ -611,17 +621,17 @@ def profil_dosen():
             return redirect('/dosen/dashboard')
         
 @app.route('/dosen/edit_profil_dosen/<id_dosen>', methods=['GET', 'POST'])
-def edit_profil_dosen(id_dosen):
+def edit_profil_dsn(id_dosen):
     token_receive = request.cookies.get("mytoken")
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-        user_info = db.dosen.find_one({"nip": payload['id']})
+        data = db.dosen.find_one({"nip": payload['id']})
         
         if request.method == "GET":
-            user_info = db.dosen.find_one({'_id' : ObjectId(id_dosen)})
-            user_info['_id'] = str(user_info['_id'])
+            data = db.dosen.find_one({'_id' : ObjectId(id_dosen)})
+            data['_id'] = str(data['_id'])
 
-            return render_template("dosen/edit_profil_dsn.html", user_info=user_info)
+            return render_template("dosen/edit_profil_dsn.html", data=data)
         
         db.dosen.update_one(
             {'_id' : ObjectId(id_dosen)},
@@ -729,7 +739,6 @@ def modul_mhs(mk_id):
 
         modul = db.modul.find_one({'_id' : ObjectId(mk_id)})
         data_modul = list(db.modul.find({'mk_id' : ObjectId(mk_id)}))
-        print(modul)
 
         if request.method == 'POST':
             comment = request.form.get('comment')
@@ -753,18 +762,15 @@ def profil_mhs():
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
             print(payload)
-            data = db.mahasiswa.find_one({"nim": payload['id']})
+            
             # print(user_info)
 
-            data = list(db.mahasiswa.find({}))
-
-            for data in data:
-                data['_id'] = str(data['_id'])
+            data = db.mahasiswa.find_one({"nim": payload['id']})
+            data['_id'] = str(data['_id'])
             
-
             return render_template("mahasiswa/profil_mhs.html", data=data)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-            return redirect('/mahasiswa/dashboard')
+            return redirect('/mahasiswa/login')
         
 @app.route('/mahasiswa/edit_profil_mhs/<id_mhs>', methods=['GET', 'POST'])
 def edit_profil_mhs(id_mhs):

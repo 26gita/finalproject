@@ -30,12 +30,21 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- connect to css -->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
-
+    
+    <style>
+        .image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+    
     <script>
         function logout_mhs() {
             $.removeCookie('mytoken', { path: '/' });
             alert('Logged out!');
-            window.location.href = '/mahasiswa/login'
+            window.location.href = '/'
         }
     </script>
 </head>
@@ -75,12 +84,15 @@
                                 <div class="card-body p-4">
                                     <div class="d-flex text-black">
                                         <div class="flex-grow-1 ms-3">
-                                            <p class="mb-2 pb-1" style="color: #2b2a2a;">
-                                                {{ data['foto'] }}</p>
+                                            <a class="image" href="/user/{{data.nim}}">
+                                                <img class="is-rounded"
+                                                    src="{{ url_for('static', filename=data.profile_pic_real) }}" />
+                                            </a>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">Nama Mahasiswa:
                                                 {{ data['nama_mhs'] }}</p>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">NIM: {{ data['nim'] }}</p>
-                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">Semester: {{ data['semester'] }}</p>
+                                            <p class="mb-2 pb-1" style="color: #2b2a2a;">Semester: {{ data['semester']
+                                                }}</p>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">Email: {{ data['email'] }}
                                             </p>
                                             <p class="mb-2 pb-1" style="color: #2b2a2a;">No HP: {{ data['no_hp'] }}

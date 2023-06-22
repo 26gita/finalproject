@@ -18,6 +18,14 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../static/css/admin/styles.css" rel="stylesheet" />
 
+    <style>
+        img {
+            width: 70%;
+            border-radius: 80%;
+            margin-bottom: 15px;
+        }
+    </style>
+    
     <script>
         $(document).ready(function () {
             $('#search').on('change', function () {
@@ -99,7 +107,7 @@
                     <button class="btn btn-primary" id="sidebarToggle"></button>
                     <h2 class="title">Web-Based Learning Information System</h2>
                     <a href="/admin/profil" class="profile-icon">
-                        <i class="fa fa-user-circle fa-lg"></i>
+                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp">
                     </a>
                 </div>
             </nav>
@@ -113,7 +121,7 @@
                                 <i class="fa fa-user-plus"></i></a>
                             <div class="pencarian">
                                 <input class="search1" type="search" placeholder="Search..." id="search">
-                                <button type="button" onclick="searchByName()" class="btn btn-outline-info"><span
+                                <button type="button" onclick="searchByName()" ><span
                                         class="fa fa-search"></span> Search</button>
                             </div>
                         </div>
@@ -123,7 +131,7 @@
                         <tr>
                             <th>Foto</th>
                             <th>Nama Lengkap</th>
-                            <th>Nim</th>
+                            <th>NIM</th>
                             <th>Semester</th>
                             <th>Email</th>
                             <th>No Hp</th>

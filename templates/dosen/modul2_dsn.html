@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Modul | mahasiswa</title>
+    <title>Modul | Dosen</title>
 
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../static/assets/course.png" />
@@ -50,9 +50,9 @@
             <div class="sidebar-heading border-bottom bg-light"> Learning-X</div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/dashboard"><i
-                    class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
+                        class="fas fa-fw fa-tachometer-alt"></i>Dashboard</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/dosen/mk_dosen"><i
-                    class="fa fa-drivers-license"></i> Mata Kuliah</a>
+                        class="fa fa-drivers-license"></i> Mata Kuliah</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -89,20 +89,12 @@
                                     download>Download Tugas Disini</a><br>
                             </div>
                         </div>
-
-                        <div class="row row-cols-1 row-cols-md-1 row d-flex">
-                            <div class="col">
-                                <div class="card h-100">
-                                    <form action="/dosen/modul2/{{ modul['_id'] }}" method="POST">
-                                        <textarea name="comment" rows="4" cols="50"></textarea>
-                                        <br>
-                                        <input type="submit" value="Post Comment">
-                                    </form>
-                                </div>
-                                <div class="button">
-                                    <a href="/dosen/mk_dosen" class="btn btn-danger">Back</a>
-                                </div>
-                            </div>
+                        <div class="mt-4">
+                            <form action="/dosen/modul2/{{ modul['_id'] }}" method="POST">
+                                <textarea name="comment" rows="4" cols="50"></textarea>
+                                <br>
+                                <input type="submit" value="Post Comment">
+                            </form>
                         </div>
                         <div class="row row-cols-1 row-cols-md-1 row d-flex">
                             <div class=" col">
@@ -121,16 +113,15 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <footer class="footer bg-light">
-        <div class="container-fluid">
-            <p>&copy; 2023 Web-Based Learning Information System</p>
-        </div>
-    </footer> -->
+            <footer class="footer bg-light">
+                <div class="container-fluid">
+                    <p>&copy; 2023 Web-Based Learning Information System</p>
+                </div>
+            </footer>
 
             <!-- Bootstrap core JS-->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

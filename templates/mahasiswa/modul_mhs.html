@@ -41,6 +41,34 @@
             margin-top: 30px;
         }
     </style>
+
+    <script>
+        function push()
+        // Ambil input file dari elemen dengan ID "fileInput"
+        const fileInput = document.getElementById('fileInput');
+        // Ambil file yang dipilih oleh pengguna
+        const file = fileInput.files[0];
+
+        // Buat objek FormData untuk mengirim data melalui AJAX
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Kirim data file ke server menggunakan metode AJAX (misalnya menggunakan library Axios)
+        axios.post('/upload-tugas', formData)
+            .then(response => {
+                // Tanggapan berhasil
+                console.log(response.data);
+                alert('Tugas berhasil diunggah!');
+                // Lakukan aksi lainnya setelah upload berhasil
+            })
+            .catch(error => {
+                // Tanggapan gagal
+                console.error(error);
+                alert('Terjadi kesalahan saat mengunggah tugas.');
+                // Lakukan penanganan kesalahan lainnya
+            });
+
+    </script>
 </head>
 
 <body>
@@ -96,48 +124,40 @@
                                 </form>
                             </div>
                         </div>
-
-                        <div class="row row-cols-1 row-cols-md-1 row d-flex">
-                            <div class="col">
-                                <div class="card h-100">
-                                    <form action="/mahasiswa/modul_mhs/{{ modul['_id'] }}" method="POST">
-                                        <textarea name="comment" rows="4" cols="50"></textarea>
-                                        <br>
-                                        <input type="submit" value="Post Comment">
-                                    </form>
-                                </div>
-                                <div class="button">
-                                    <a href="/mahasiswa/mk" class="btn btn-danger">Back</a>
-                                </div>
-                            </div>
+                        <div class="mt-4">
+                            <form action="/mahasiswa/modul_mhs/{{ modul['_id'] }}" method="POST">
+                                <textarea name="comment" rows="4" cols="50"></textarea>
+                                <br>
+                                <input type="submit" value="Post Comment">
+                            </form>
                         </div>
                         <div class="row row-cols-1 row-cols-md-1 row d-flex">
                             <div class=" col">
                                 <div class=" card h-100">
                                     <div class="card-body ">
-                                        <h2 class="row d-flex">Komentar :</h2>  
+                                        <h2 class="row d-flex">Komentar :</h2>
                                         <div>
                                             <div id="comment-list">
                                                 {% for comment in modul['comments'] %}
-                                                    <div class="comment">
-                                                        <strong>{{ comment['user'] }}:</strong> {{ comment['comment'] }}
-                                                    </div>
+                                                <div class="comment">
+                                                    <strong>{{ comment['user'] }}:</strong> {{ comment['comment'] }}
+                                                </div>
                                                 {% endfor %}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-  
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- <footer class="footer bg-light">
-        <div class="container-fluid">
-            <p>&copy; 2023 Web-Based Learning Information System</p>
-        </div>
-    </footer> -->
+
+            <footer class="footer bg-light">
+                <div class="container-fluid">
+                    <p>&copy; 2023 Web-Based Learning Information System</p>
+                </div>
+            </footer>
 
             <!-- Bootstrap core JS-->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>

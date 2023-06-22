@@ -14,6 +14,9 @@
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
+    <!-- Link font awesome-->
+    <link href=" https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
@@ -28,18 +31,20 @@
 
     <style>
         body {
-            background-color: white;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../../static/assets/bg2.jpg");
+            background-size: cover;
+            background-position: center;
         }
 
-        .admin-page {
-            background-color: #ececed;
+        .index-page {
+            background-color: white;
         }
 
         li {
             width: 150px;
             height: 50px;
-            background-color: black;
-            color: #e1e2e7;
+            background-color: rgb(35, 122, 194);
+            color: #ffffff;
             font-size: 30px;
             border-radius: 5px;
             text-align: center;
@@ -51,9 +56,44 @@
         }
 
         .edukasi img {
-            width: 40%;
+            width: 50%;
+            border-radius: 80%;
+            margin-bottom: 15px;
+        }
+
+        .nav-item {
+            margin-left: 30px;
+            width: 200px;
+        }
+
+        .p-5 {
+            background-image: url("../../static/assets/bg2.jpg");
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+        }
+
+        .inner-addon .fa {
+            position: absolute;
+            padding: 10px;
+            pointer-events: none;
+        }
+
+        .inner-addon .fa {
+            position: absolute;
+            padding: 10px;
+            pointer-events: none;
+        }
+
+        .align icon .left-addon .fa {
+            left: 0px;
+        }
+
+        .left-addon input {
+            padding-left: 40px;
         }
     </style>
+
 
     <script>
         {% if msg %}
@@ -121,11 +161,11 @@
                                         <h2 class="h4 text-gray-900 mb-4"><b>Log In As Dosen</b> </h2>
                                     </div>
                                     <div class="user">
-                                        <div class="form-group mb-2"><i class="bi bi-person-fill"></i>
+                                        <div class="inner-addon left-addon form-group mb-2"><i class="fa fa-user"></i>
                                             <input type="text" class="form-control form-control-user" id="nip"
                                                 placeholder="Enter NIP">
                                         </div>
-                                        <div class="form-group mb-4">
+                                        <div class="inner-addon left-addon form-group mb-4"><i class="fa fa-key"></i>
                                             <input type="password" class="form-control form-control-user" id="password"
                                                 placeholder="Enter Your Password">
                                         </div>
