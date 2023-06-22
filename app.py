@@ -21,11 +21,10 @@ ALGORITHMS =  os.environ.get("ALGORITHMS")
 client = MongoClient(MONGODB_URI, tlsCAFile=certifi.where())  
 db = client[DB_NAME]
 
-app =  Flask(__name__)
+app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["UPLOAD_FOLDER"] = "./static/tugas"
 app.config["UPLOAD_FOLDER"] = "./static/modul"
-
 
 @app.route('/')
 def index():
@@ -633,7 +632,7 @@ def edit_profil_dsn(id_dosen):
 
             return render_template("dosen/edit_profil_dsn.html", data=data)
         
-        db.dosen.update_one(
+        db.mahasiswa.update_one(
             {'_id' : ObjectId(id_dosen)},
             {'$set' : {
                 'nip' : request.form.get('nip'),
